@@ -1,0 +1,122 @@
+<apex:page tabStyle="Campaign_Calendar__tab" controller="ExtViewCampaignByMonth" sidebar="false">
+    <style>
+        .rollup td {
+            padding: 5px;
+            height: 15px;
+            border: 1px solid #DEDEDE;
+        }
+        .headerRow {
+            background: url("/img/alohaSkin/grid_headerbg.gif") repeat-x scroll 0 bottom #ECECEC;
+            border-width: 0 0 1px 1px;
+            color: #ECECEC;
+            font-weight: bold;
+            padding: 5px 2px 4px 5px;
+        }
+        .headerRow td {
+            padding-left:10px;
+            height: 15px;
+            text-align: center;
+            border: 1px solid #ECECEC;
+            font-weight:bold;
+         }
+         .day {
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid #CCC;
+            font-weight: bold;
+            
+         }
+         a {
+             color: #015BA7;
+             text-decoration: none;
+         }
+         body a:hover{
+            text-decoration: underline;
+            color: #015BA7;
+         }
+    </style>
+    
+    <apex:sectionHeader title="Campaign Calendar"/>
+    
+    <apex:form >
+        <apex:pageblock >
+            <apex:pageBlockSection Id="header" >
+            
+                <apex:outputPanel styleClass="calendarHeaderBG calendarHeader">
+                    <apex:outputPanel styleClass="bPageTitle">
+                    
+                        <apex:outputPanel styleClass="dwmIcons">                            
+                            <apex:commandLink action="{!save}" title="Week View">
+                                <apex:image value="/s.gif" alt="Week View" styleClass="weekViewIcon"
+                                        onmouseout="this.className = 'weekViewIcon';this.className = 'weekViewIcon';" 
+                                            onmouseover="this.className = 'weekViewIconOn';this.className = 'weekViewIconOn';" 
+                                                title="Week View"/>
+                            </apex:commandLink>
+                            
+                            <apex:commandLink action="{!save}" title="Month View">
+                                <apex:image value="/s.gif" alt="Month View" styleClass="monthViewIconOn"
+                                        onmouseout="this.className = 'monthViewIcon';this.className = 'monthViewIcon';" 
+                                            onmouseover="this.className = 'monthViewIconOn';this.className = 'monthViewIconOn';" 
+                                                title="Month View"/>
+                            </apex:commandLink>
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel styleClass="dateText">{!dateText}</apex:outputPanel>
+                        
+                        <apex:outputPanel styleClass="arrowIcons" style="position: absolute;left: 284px;">
+                            <apex:commandLink action="{!previousMonth}" styleClass="prev" title="Previous Day" reRender="header, content">
+                                <apex:image value="/s.gif" alt="Previous Day" styleClass="prevCalArrow" title="Previous Day" />
+                            </apex:commandLink>
+                            
+                            <apex:commandLink action="{!nextMonth}" styleClass="next" title="Next Day" reRender="header, content">
+                                <apex:image value="/s.gif" alt="Next Day" styleClass="nextCalArrow" title="Next Day" />
+                            </apex:commandLink>
+                        </apex:outputPanel>
+                                
+                        <apex:outputPanel styleClass="dateLinks" style="position: absolute; left: 350px;font-size:14px;" >
+                            <apex:commandLink action="{!thisMonth}" value="This Month"  reRender="header, content" />
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    
+                </apex:outputPanel>
+                
+            </apex:pageBlockSection>
+            
+            <apex:outputPanel Id="content">
+                <table cellspacing="0" cellpadding="0" width="100%" align="center" class="rollup">
+                    <tbody>
+                    
+                        <tr class="headerRow">
+                            <apex:repeat value="{!headers}" var="header">
+                                <td>{!header}</td>
+                            </apex:repeat>
+                            
+                        </tr>
+                        <apex:repeat value="{!splitDates}" var="splitDate">
+                            <tr class="rollup">
+                                <apex:repeat value="{!splitDate.dateCams}" var="dateCams" >
+                                    <td width="14.285%" style="vertical-align:top; height:100px; background-color: {!IF(TODAY() = dateCams.sDate, '#B8E4FB', IF(dateCams.isInCurrentMonth, 'white', '#ECECEC'))}">
+                                        <div class="day">{!DAY(dateCams.sDate)}</div>
+                                        <apex:repeat value="{!dateCams.campsInsDate}" var="cam">
+                                            <div>
+                                                <a href="/{!cam.Id}" target="_blank"> 
+                                                     {!cam.Name} 
+                                                     <!--
+                                                     [
+                                                     {!TEXT(YEAR(cam.StartDate)) & "-" & TEXT(MONTH(cam.StartDate)) & "-" & TEXT(DAY(cam.StartDate))} 
+                                                     to 
+                                                     {!TEXT(YEAR(cam.EndDate)) & "-" & TEXT(MONTH(cam.EndDate)) & "-" & TEXT(DAY(cam.EndDate))}] 
+                                                     -->
+                                                </a> 
+                                            </div>
+                                        </apex:repeat>
+                                    </td> 
+                                </apex:repeat>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputPanel>
+        </apex:pageblock>
+    </apex:form>
+</apex:page>
