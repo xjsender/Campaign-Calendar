@@ -1,3 +1,4 @@
 If you think it is suit for you, please try it.
 No copyright, just for fun.
-²Á
+Just Create an wide Home Pagelaout component, populated with:
+<br><iframe src="/apex/ViewCampaignByMonth?core.apexpages.devmode.url=1" frameborder="0" scrolling="false" width="100%" height="800px"></iframe><br>
